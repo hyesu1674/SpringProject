@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="yjc.wdb.BoardReplyMapper">
+	<select id="list" resultType="BoardReply">
+		select *
+		from tbl_reply_1501280
+		where bno=#{bno}
+		order by rno desc
+	</select>
+
+	<select id="listPage" resultType="BoardReply">
+		select *
+		from tbl_reply_1501280
+		where bno = #{bno}
+		order by rno desc
+		limit #{criteria.startRecord}, #{criteria.recordsPerPage}
+	</select>
+
+	<select id="replyCount" resultType="int">
+	   select count(*)
+	   from tbl_reply_1501280
+	   where bno =#{bno}
+	</select>
+
+	<insert id="create">
+		insert into tbl_reply_1501280(bno, replyText,
+		replyer)
+		values(#{bno}, #{replyText}, #{replyer})
+	</insert>
+	<update id="update">
+		update tbl_reply_1501280
+		set replyText = #{replyText},
+		updateDate = now()
+		where rno = #{rno}
+	</update>
+	<delete id="delete">
+		delete from tbl_reply_1501280 where rno=#{rno}
+	</delete>
+
+
+
+</mapper>

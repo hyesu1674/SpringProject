@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="yjc.wdb.bbsMapper">
+	<insert id="create">
+		insert into tbl_board(title, content, writer)
+		values(#{title}, #{content}, #{writer})
+	</insert>
+
+	<select id="read" resultType="Board">
+		select *
+		from tbl_board
+		where bno =
+		#{bno}
+	</select>
+
+	<update id="update">
+		update tbl_board
+		set title = #{title}, content =
+		#{content}, writer = #{writer}
+		where bno = #{bno}
+	</update>
+
+	<delete id="delete">
+		delete from tbl_board where bno = #{bno}
+	</delete>
+
+	<select id="listAll" resultType="Board">
+		select * from tbl_board
+		order by
+		bno desc;
+	</select>
+
+	<select id="listPage" resultType="Board">
+		select *
+		from tbl_board
+		order by
+		bno desc
+		limit #{startRecord}, #{recordsPerPage}
+	</select>
+	<select id="totalCount" resultType="Integer">
+		select count(*) from
+		tbl_board
+	</select>
+	
+	   <sql id="search">
+        <if test="searchType != null">
+            <if test="searchType == 't'.toString()">
+                where title like CONCAT('%', #{keyword}, '%')
+            </if>
+            <if test="searchType == 'c'.toString()">
+                where content like CONCAT('%', #{keyword}, '%')
+            </if>
+            <if test="searchType == 'w'.toString()">
+                where writer like CONCAT('%', #{keyword}, '%')
+            </if>
+            <if test="searchType == 'tc'.toString()">
+                where writer like CONCAT('%', #{keyword}, '%')
+                or content like CONCAT('%', #{keyword}, '%')
+            </if>
+            <if test="searchType == 'cw'.toString()">
+                where content like CONCAT('%', #{keyword}, '%')
+                or writer like CONCAT('%', #{keyword}, '%') 
+            </if>
+            <if test="searchType == 'tcw'.toString()">
+                where title like CONCAT('%', #{keyword}, '%')
+                or content like CONCAT('%', #{keyword}, '%')
+                or writer like CONCAT('%', #{keyword}, '%')
+            </if>
+        </if>
+    </sql>
+
+	<select id="listSearch" resultType="Board">
+		select *
+		from tbl_board
+		<!-- 1. where title like '%test%'; 2. where content like '%test%'; 3. where 
+			title like '%test%'or content like '%test%'; -->
+        <include refid="search"></include>
+		order by bno desc
+		limit #{startRecord}, #{recordsPerPage}
+	</select>
+
+	<select id="searchTotalCount" resultType="Integer">
+		select count(*)
+		from tbl_board
+		<include refid="search"></include>
+	</select>
+</mapper>
