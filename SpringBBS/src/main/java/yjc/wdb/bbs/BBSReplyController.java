@@ -27,120 +27,89 @@ public class BBSReplyController {
 	@Inject
 	private BoardReplyService service;
 	
-	
+	// 페이징 처리
 	@RequestMapping(value="/{bno}/{page}", method=RequestMethod.GET)
-	public ResponseEntity<Map<String, Object>> llistPage(@PathVariable("bno") int bno, @PathVariable("page") int page){
-		
+	public ResponseEntity<Map<String, Object>> listPage(@PathVariable("bno") int bno, @PathVariable("page") int page){
 		ResponseEntity<Map<String, Object>> entity = null;
-		
-		try{
+
+		try {
 			Criteria criteria = new Criteria();
 			criteria.setPage(page);
-			
 			
 			int replyCount = service.replyCount(bno);
 			criteria.setTotalCount(replyCount);
 			
 			List<BoardReply> list = service.listPage(bno, criteria);
-			
-			// Map : Interface
-			Map<String, Object> map = new HashMap<String, Object>();
-			map.put("criteria", criteria);
+			Map<String, Object> map = new HashMap<>();
 			map.put("list", list);
+			map.put("criteria", criteria);
 			
-			entity = new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
-			
-			
-		}catch(Exception e){
+			entity = new ResponseEntity<Map<String,Object>>(map, HttpStatus.OK);
+		} catch (Exception e) {
 			e.printStackTrace();
-			entity = new ResponseEntity<>(HttpStatus.BAD_REQUEST);			
+			entity = new ResponseEntity<Map<String,Object>>(HttpStatus.BAD_REQUEST);
 		}
-	
-	
+		
 		return entity;
 	}
 	
-	
-	@RequestMapping(value="/{rno}", method=RequestMethod.DELETE)
-	public ResponseEntity<String> removeReply(@PathVariable("rno") int rno){
+	// 댓글 삭제
+	@RequestMapping(value="{rno}", method=RequestMethod.DELETE)
+	public ResponseEntity<String> remove(@PathVariable("rno") Integer rno){
 		ResponseEntity<String> entity = null;
 		
-		try{
-			
+		try {
 			service.delete(rno);
-			entity =  new ResponseEntity<String>("SUCCESS", HttpStatus.OK);
-			
-		}catch(Exception e){
-			e.printStackTrace();
-			entity = new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
-		}
-		
-		return entity;
-	}
-	
-	
-	@RequestMapping(value="/{rno}", method={ RequestMethod.PUT, RequestMethod.PATCH })
-	// put, patch 모두 처리해줌.
-	public ResponseEntity<String> updateReply(@PathVariable("rno") int rno, @RequestBody BoardReply reply){
-		
-		// PUT, PATCH, DELETE 있어요~
-		// Web Service 중 일반적인 것은 http 요청이 오면 html을 응답으로 준다.
-		// http 요청을 보내는 이유가 html 문서를 요구하는 것이 아니라 특정 url에 해당하는
-		// 데이터를 얻기 위한 것인 경우,
-		// 그러한 요청을 처리하는 웹서비스를
-		// Restful Service 
-		// Rest : Represtational State Transefer
-		
-		// 데이터를 등록... POST
-		// 데이터를 조회 ... GET
-		// 데이터를 삭제 ... DELETE
-		// 데이터를 수정 ... PUT, PATCH
-		
-		ResponseEntity<String> entity = null;
-		try{
-			reply.setRno(rno);
-			service.update(reply);
-			
 			entity = new ResponseEntity<String>("SUCCESS", HttpStatus.OK);
-			
-		}catch(Exception e){
+		} catch (Exception e) {
 			e.printStackTrace();
 			entity = new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
 		
 		return entity;
-	 
 	}
 	
+	// 댓글 수정
+	@RequestMapping(value="{rno}", method={RequestMethod.PUT, RequestMethod.PATCH})
+	public ResponseEntity<String> update(@PathVariable("rno") Integer rno, @RequestBody BoardReply reply){
+		ResponseEntity<String> entity = null;
+		
+		try {
+			reply.setRno(rno);	// mapper에서 rno값을 받아야하므로 값을 넘겨준다
+			service.update(reply);
+			entity = new ResponseEntity<String>("SUCCESS", HttpStatus.OK);
+		} catch (Exception e) {
+			e.printStackTrace();
+			entity = new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		}
+		return entity;
+	}
+	
+	// 댓글 조회
 	@RequestMapping(value="/all/{bno}", method=RequestMethod.GET)
-	public ResponseEntity<List<BoardReply>> getReplyList(@PathVariable("bno") int bno){
-		// @PathVariable url의 값을 받아옴. 예) http://localhost8080:/bbs/replies/all/ 345
-		// 345 값을 받아옴
+	public ResponseEntity<List<BoardReply>> list(@PathVariable("bno") Integer bno){
 		ResponseEntity<List<BoardReply>> entity = null;
 		
-		try{
-			List<BoardReply> list = service.list(bno);
-			entity = new ResponseEntity<List<BoardReply>>(list, HttpStatus.OK);
-		}catch(Exception e){
+		try {
+			entity = new ResponseEntity<>(service.list(bno), HttpStatus.OK);	// 제네릭은 JDK버전 1.7부터 생략가능
+		} catch (Exception e) {
 			e.printStackTrace();
 			entity = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 		
 		return entity;
-		
 	}
-
-
 	
+	// 댓글 등록
 	@RequestMapping(value="", method=RequestMethod.POST)
-	public ResponseEntity<String> register(@RequestBody BoardReply reply){
+	public ResponseEntity<String> register(@RequestBody BoardReply reply){	// json으로 받은 데이터를 자동으로 객체로 만듬
 		
 		ResponseEntity<String> entity = null;
 		
-		try{
+		try {
 			service.create(reply);
 			entity = new ResponseEntity<String>("SUCCESS", HttpStatus.OK);
-		}catch(Exception e){
+		} catch (Exception e) {
 			e.printStackTrace();
 			entity = new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
@@ -149,49 +118,48 @@ public class BBSReplyController {
 	}
 	
 	
+	
+	//---------------------------------------- TEST --------------------------------------------//
 	@RequestMapping("getErrorNot")
 	public ResponseEntity<List<Member>> getErrorNot(){
 		ResponseEntity<List<Member>> entity = null;
+		
 		List<Member> list = new ArrayList<Member>();
-		list.add(new Member("hs", 22));
-		list.add(new Member("hyesu",22));
+		list.add(new Member("A", 18));
+		list.add(new Member("B", 24));
 		
 		entity = new ResponseEntity<List<Member>>(list, HttpStatus.NOT_FOUND);
-		
 		return entity;
 	}
+	
 	@RequestMapping("getErrorAuth")
 	public ResponseEntity<Void> getErrorAuth(){
 		ResponseEntity<Void> re = new ResponseEntity<Void>(HttpStatus.BAD_REQUEST);
-		
 		return re;
 	}
-
+	
 	@RequestMapping(value="getMap")
 	public Map<Integer, Member> getMap(){
-		Map<Integer, Member> map = new HashMap<Integer, Member>();
-		map.put(1, new Member("hs",22));
-		map.put(2, new Member("ge",22));
-		map.put(3, new Member("ys",22));
-		map.put(4, new Member("sh",22));
-		map.put(5, new Member("gh",22));
+		// 1.7 이상의 컴파일러 사용시 HashMap<>() 으로 사용가능
+		// 자바 버전 변경하는 방법
+		// project 우클릭 후 properties > project Facets > JAVA 버전 변경
+		Map<Integer, Member> map = new HashMap<>();
+		map.put(1, new Member("A", 18));
+		map.put(2, new Member("B", 24));
+		map.put(3, new Member("C", 20));
+		map.put(4, new Member("D", 19));
+		map.put(5, new Member("E", 22));
 		return map;
 	}
 	
 	@RequestMapping(value="getMList")
 	public List<Member> getMList(){
 		ArrayList<Member> list = new ArrayList<Member>();
-		
-		list.add(new Member("hs", 22));
-		list.add(new Member("ge", 23));
-		list.add(new Member("ys", 22));
-		list.add(new Member("sh", 25));
-		list.add(new Member("gh", 22));
-		list.add(new Member("sh", 22));
+		list.add(new Member("A", 18));
+		list.add(new Member("B", 24));
+		list.add(new Member("C", 20));
+		list.add(new Member("D", 19));
+		list.add(new Member("E", 22));
 		return list;
-	
 	}
-	
-	
-
 }

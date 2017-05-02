@@ -1,15 +1,14 @@
 package yjc.wdb.bbs.bean;
 
-import java.sql.Date;
+import java.util.Date;
 
 public class Board {
-	private 	int 	bno;
-	private 	String 	title;
-	private 	String 	content;
-	private 	String 	writer;
-	private		int 	viewcnt;
-	private		Date 	regdate;
-	
+	private int bno;
+	private String title;
+	private String content;
+	private String writer;
+	private int viewcnt;
+	private Date regdate;
 	public Date getRegdate() {
 		return regdate;
 	}
@@ -46,5 +45,4 @@ public class Board {
 	public void setViewcnt(int viewcnt) {
 		this.viewcnt = viewcnt;
 	}
-
 }

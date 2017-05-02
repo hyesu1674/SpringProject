@@ -10,66 +10,60 @@ import org.springframework.stereotype.Repository;
 import yjc.wdb.bbs.bean.Board;
 import yjc.wdb.bbs.bean.Criteria;
 
-@Repository // DB관련 스프링 빈
+@Repository
 public class BoardDAOImpl implements BoardDAO {
 	
-	private static final String namespace ="yjc.wdb.bbsMapper";
+	//BoardMapper.xml에 접근하기위해서 namespace를 멤버변수로 지정
+	private static final String namespace = "yjc.wdb.bbsMapper";				
 	
-	@Inject // inject 어노테이션 : spring Bean의 객체를 자동으로 가져옴.
-	private SqlSession sqlSession;
-	// 내부적으로 root-context.xml에서 설정한 sqlSession을 불러줌
-	// 그때 설정한 id값이 변수 이름
-
-
+	//root-context.xml 파일의 SqlSession Spring Bean에 지정한 sqlSession
+	// 스프링빈은 객체를 생성하지 않고 프레임웤이 생성해줌(제어의 역전) >> 어노테이션지정(필수)
+	@Inject
+	private SqlSession sqlSession;	
+	
 	@Override
 	public void create(Board vo) throws Exception {
-	
-		sqlSession.insert(namespace+".create", vo);
-
+		sqlSession.insert(namespace + ".create", vo);
 	}
 
 	@Override
 	public Board read(int bno) throws Exception {
-		
-		return sqlSession.selectOne(namespace+".read", bno);
+		return sqlSession.selectOne(namespace + ".read", bno);
 	}
 
 	@Override
 	public void update(Board vo) throws Exception {
-		
-		sqlSession.update(namespace+".update", vo);
+		sqlSession.update(namespace + ".update", vo);
 	}
 
 	@Override
 	public void delete(int bno) throws Exception {
-		
-		sqlSession.delete(namespace+".delete", bno);
+		sqlSession.delete(namespace + ".delete", bno);
 	}
 
 	@Override
 	public List<Board> listAll() throws Exception {
-		
-		return sqlSession.selectList(namespace+".listAll");
+		return sqlSession.selectList(namespace + ".listAll");
 	}
 
 	@Override
 	public List<Board> listPage(Criteria criteria) throws Exception {
-		return sqlSession.selectList(namespace+".listPage", criteria);
+		return sqlSession.selectList(namespace + ".listPage", criteria);
 	}
 
 	@Override
 	public int getTotalCount() throws Exception {
-		return sqlSession.selectOne(namespace+".totalCount");
+		return sqlSession.selectOne(namespace + ".totalCount");
 	}
 
 	@Override
 	public List<Board> listSearch(Criteria criteria) throws Exception {
-		return sqlSession.selectList(namespace+".listSearch", criteria);
+		return sqlSession.selectList(namespace + ".listSearch", criteria);
 	}
 
 	@Override
-	public int getSearchTotalcount(Criteria criteria) throws Exception {
-		return sqlSession.selectOne(namespace+".searchTotalCount", criteria);
+	public int getSearchTotalCount(Criteria criteria) throws Exception {
+		return sqlSession.selectOne(namespace + ".searchTotalCount", criteria);
 	}
-
+	
 }

@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE configuration
-    PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
-    "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
 	<typeAliases>
-		<typeAlias type="yjc.wdb.bbs.bean.Board" alias="Board"/>
-		<typeAlias type="yjc.wdb.bbs.bean.BoardReply" alias="BoardReply"/>
+		<typeAlias alias="Board" type="yjc.wdb.bbs.bean.Board" />
+		<typeAlias alias="BoardReply" type="yjc.wdb.bbs.bean.BoardReply" />
 	</typeAliases>
 </configuration>
