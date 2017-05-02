@@ -7,7 +7,6 @@
 <title>Insert title here</title>
 </head>
 <body>
-<h1>hi~2 name: ${member.name} your age: ${member.age} </h1>
-<h2>${member}</h2> <!-- 내부적으로 toString 함수가 불림 -->
+<h1>안녕</h1>
 </body>
 </html>

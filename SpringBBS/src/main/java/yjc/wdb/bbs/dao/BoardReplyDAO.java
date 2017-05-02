@@ -10,6 +10,7 @@ public interface BoardReplyDAO {
 	public void create(BoardReply reply) throws Exception;
 	public void update(BoardReply reply) throws Exception;
 	public void delete(int rno) throws Exception;
+	
 	public List<BoardReply> listPage(int bno, Criteria criteria) throws Exception;
 	public int replyCount(int bno) throws Exception;
 }

@@ -8,7 +8,6 @@ public class Member {
 		this.name = name;
 		this.age = age;
 	}
-	
 	public Member(){
 		
 	}
@@ -26,8 +25,9 @@ public class Member {
 		this.age = age;
 	}
 	
+	@Override
 	public String toString(){
-		return "name : " + name + ", age : " + age ;
-		
+		return "name : "+name+", age : "+age;
 	}
+
 }

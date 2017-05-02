@@ -11,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import yjc.wdb.bbs.bean.Member;
 
@@ -44,43 +45,43 @@ public class HomeController {
 		return "hello";
 	}
 	
+	/* test2라는 요청이 오면 test.jsp 페이지를 실행 시키도록
+	 * 메소드를 작성해서 실행해 보시오.
+	 */
 	@RequestMapping(value="/test2")
-	public String test(){
-		return "test";
+	public String test2(){
+		return "test2";
 	}
 	
-	@RequestMapping(value="ajaxTest", method=RequestMethod.GET)
-	public void ajaxTest(){
-		
+	@RequestMapping(value="/hi")
+	public void test(@RequestParam(value="myname", defaultValue="hs") String myname, int age, Model model){
+		System.out.println("Name:"+myname+"~!");
+		System.out.println("Age:"+age+"~!");
+		model.addAttribute("name", myname);
+		model.addAttribute("age", age);
 	}
 	
-//	@RequestMapping(value="/hi")
-//	public void hi(@RequestParam(value="myname", defaultValue="안넘어왔을때 기본값") String name, int age, Model model){
-//		System.out.println("Name : " + name + "~");
-//		System.out.println("Age : " + age + "~");
-//		// Spring 프레임웤이 자동으로 Model 이라는 객체를 만들어서 넘겨준다.
-//		// 객체에 값을 넣어줌
-//		model.addAttribute("name", name);
-//		model.addAttribute("age", age);
-//	}
-//	
-//	@RequestMapping(value="/hi2")
-//	public String hi2(Member m, Model model){
-//		System.out.println("name : " + m.getName());
-//		System.out.println("age : " + m.getAge());
-//		System.out.println("Member : " + m);	//주소값만 찍힘
-//		model.addAttribute("member", m);
-//		
-//		return "hi2";
-//	}
-	
-	@RequestMapping(value="/hi3")
-	public String hi3(@ModelAttribute Member m){
-		System.out.println("name : " + m.getName());
-		System.out.println("age : " + m.getAge());
-		System.out.println("Member : " + m);	//주소값만 찍힘
+	@RequestMapping(value="/hi2")
+	public String hi2(Member m, Model model){
+		System.out.println("name:"+m.getName());
+		System.out.println("age:"+m.getAge());
+		System.out.println("Member:"+m); //멤버객체가 자동으로 만들어짐
+		model.addAttribute("m", m);
 		return "hi2";
 	}
 	
+	@RequestMapping(value="/hi3")
+	public String hi3(@ModelAttribute Member m){
+		System.out.println("name:"+m.getName());
+		System.out.println("age:"+m.getAge());
+		System.out.println("Member:"+m); //멤버객체가 자동으로 만들어짐
+		return "hi2";
+	}
 	
+	@RequestMapping(value="/ajaxTest", method=RequestMethod.GET)
+	public void ajaxTest(){
+		
+		
+		
+	}
 }
