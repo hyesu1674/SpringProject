@@ -1,8 +1,0 @@
-create table tbl_reply_1501280(
-rno int primary key auto_increment,
-bno int references tbl_board(bno),
-replyText varchar(1000) not null,
-replyer varchar(50) not null,
-regdate TIMESTAMP not null default now(),
-updateDate timestamp not null default now()
-);

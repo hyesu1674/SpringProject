@@ -1,156 +1,135 @@
-<%@ page language="java" contentType="text/html; charset=EUC-KR"
-	pageEncoding="EUC-KR"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <!DOCTYPE html>
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=EUC-KR">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<!-- ÇÕÃÄÁö°í ÃÖ¼ÒÈ­µÈ ÃÖ½Å CSS -->
-<link rel="stylesheet"
-	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
-
-<!-- ºÎ°¡ÀûÀÎ Å×¸¶ -->
-<link rel="stylesheet"
-	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
-<link rel="stylesheet"
-	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-<script
-	src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-<script
-	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<meta charset="UTF-8">
 <title>Insert title here</title>
+<script src="http://code.jquery.com/jquery-3.1.1.min.js"></script>
+<!-- í•©ì³ì§€ê³  ìµœì†Œí™”ëœ ìµœì‹  CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+<!-- ë¶€ê°€ì ì¸ í…Œë§ˆ -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+<!-- í•©ì³ì§€ê³  ìµœì†Œí™”ëœ ìµœì‹  ìë°”ìŠ¤í¬ë¦½íŠ¸ -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
 </head>
+<style>
+	.table { width: 600px;}
+</style>
 <body>
-	<div style="margin: 15% 15%">
-		<!-- jstl: JSP Standard Tag Library -->
-		<form id="pageForm" class="form-inline" style="margin-bottom: 5px ">
-			<input type="hidden" name="page" value="${criteria.page}"> <input
-				type="hidden" name="recordsPerPage"
-				value="${criteria.recordsPerPage}">
-			<div class="form-group">
-				<label>SearchType:</label> <select name="searchType"
-					class="form-control">
-					<option value="n">
-						<c:out value="${criteria.searchType == null ? 'selected':'' }" />
-						-------------------------------
-					</option>
-					<option value="t">
-						<c:out value="${criteria.searchType eq 't' ? 'selected':'' }" />
-						Title
-					</option>
-					<option value="c">
-						<c:out value="${criteria.searchType eq 'c' ? 'selected':'' }" />
-						Content
-					</option>
-					<option value="w">
-						<c:out value="${criteria.searchType eq 'w' ? 'selected':'' }" />
-						Writer
-					</option>
-					<option value="tc">
-						<c:out value="${criteria.searchType eq 'tc' ? 'selected':'' }" />
-						Title OR Content
-					</option>
-					<option value="cw">
-						<c:out value="${criteria.searchType eq 'cw' ? 'selected':'' }" />
-						Content OR Writer
-					</option>
-					<option value="tcw">
-						<c:out value="${criteria.searchType eq 'tcw' ? 'selected':'' }" />
-						Title OR Content OR Writer
-					</option>
-				</select>
-			</div>
-			<span>&nbsp&nbsp&nbsp&nbsp&nbsp</span>
-			<div class="form-group">
-				<label>Keyword:</label> <input type="text" name="keyword"
-					value="${criteria.keyword}" class="form-control">
-			</div>
-			<div class="form-group">
-				<button id="searchBtn" class="btn btn-default">Search</button>
-				<button id="newBtn" class="btn btn-default">Write</button>
-			</div>
-		</form>
-		<table class="table table-hover">
-			<tr>
-				<th>NO</th>
-				<th>TITLE</th>
-				<th>WRITER</th>
-				<th>REGDATE</th>
-				<th>VIEW COUNT</th>
-			</tr>
-
-			<c:forEach items="${list}" var="board">
-				<tr>
-					<td>${board.bno}</td>
-					<td><a href='${board.bno}' class="title">${board.title}</a></td>
-					<td>${board.writer}</td>
-					<td><fmt:formatDate pattern="yyyy-MM-dd HH:mm"
-							value="${board.regdate}" /></td>
-					<td>${board.viewcnt}</td>
-				</tr>
-			</c:forEach>
-		</table>
-		<div class="container" style="margin: 5% 5%;">
-			<ul class="pagination">
-				<c:if test="${criteria.prev}">
-					<li><a href="${criteia.startPage-1}">&laquo;</a></li>
-				</c:if>
-				<c:forEach begin="${criteria.startPage}" end="${criteria.endPage}"
-					var="idx">
-					<li <c:out value="${idx == criteria.page? 'class=active':''}"/>>
-						<a href="${idx}"> ${idx} </a>
-					</li>
-
-				</c:forEach>
-				
-				<c:if test="${criteria.next}">
-					<li><a href="${criteia.endPage+1}">&raquo;</a></li>
-				</c:if>
-			</ul>
+	<!-- jstl : JSP Standard Tag Library -->
+	<form id="pageForm" class="form-inline" style="margin:1% 1%">
+		<!-- ìˆ¨ê²¨ì§„ input íƒœê·¸ -->
+		<input type="hidden" name="page" value="${criteria.page}">	<!-- í˜„ì¬ í˜ì´ì§€ -->
+		<input type="hidden" name="recordsPerPage" value="${criteria.recordsPerPage}">	<!-- í•œë²ˆì— ë³´ì—¬ì§ˆ ëª©ë¡ ìˆ˜ -->
+		<div class="form-group">
+			<label>Search Type : </label>
+			<select name="searchType" class="form-control">
+				<option value="n" <c:out value="${criteria.searchType == null ? 'selected':''}"/>>
+				---</option>
+				<option value="t" <c:out value="${criteria.searchType eq 't' ? 'selected':''}"/>>
+				Title</option>
+				<option value="c" <c:out value="${criteria.searchType eq 'c' ? 'selected':''}"/>>
+				Content</option>
+				<option value="w" <c:out value="${criteria.searchType eq 'w' ? 'selected':''}"/>>
+				Writer</option>
+				<option value="tc" <c:out value="${criteria.searchType eq 'tc' ? 'selected':''}"/>>
+				Title OR Content</option>
+				<option value="cw" <c:out value="${criteria.searchType eq 'cw' ? 'selected':''}"/>>
+				Content OR Writer</option>
+				<option value="tcw" <c:out value="${criteria.searchType eq 'tcw' ? 'selected':''}"/>>
+				Title OR Content OR Writer</option>
+			</select>
 		</div>
+		<span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+		<div class="form-group">
+			<label>Keyword : </label>
+			<input type="text" name="keyword" value="${criteria.keyword}" class="form-control">
+		</div>
+		<span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+		<div class="form-group">
+			<button id="searchBtn" class="btn btn-default">Search</button>
+			<button id="newBtn" class="btn btn-default">New Board</button>
+		</div>
+	</form>
+	
+	
+	<table class="table">
+		<tr>
+			<th>NO</th>
+			<th>TITLE</th>
+			<th>WRITER</th>
+			<th>REGDATE</th>
+			<th>VIEW COUNT</th>
+		</tr>
+		<!-- ëª©ë¡ -->
+		<c:forEach items="${list}" var="board">
+			<tr>
+				<td>${board.bno}</td>
+				<td><a href="${board.bno}" class="title">${board.title}</a></td>
+				<td>${board.writer}</td>
+				<td><fmt:formatDate pattern="yyyy-MM-dd HH:mm" value="${board.regdate}" /></td>
+				<td>${board.viewcnt}</td>
+			</tr>
+		</c:forEach>
+	</table>
+	
+	<div class="container">
+		<ul class="pagination">
+			<c:if test="${criteria.prev}">
+				<li><a href="${criteria.startPage-1}">&laquo;</a></li>
+			</c:if>
+			
+			<c:forEach begin="${criteria.startPage}" end="${criteria.endPage}" var="idx">
+				<!-- idxì™€ í˜„ì¬ í˜ì´ì§€ê°€ ê°™ë‹¤ë©´ classë¥¼ ì¤Œ -->
+				<li <c:out value="${idx==criteria.page ? 'class=active' : ''}"/>>
+					<a href="${idx}">${idx}</a>
+				</li>
+			</c:forEach>
+			
+			<c:if test="${criteria.next}">
+				<li><a href="${criteria.endPage+1}">&raquo;</a></li>
+			</c:if>
+		</ul>
 	</div>
+	
+	
 
-	<script type="text/javascript">
-         var pageForm = $("#pageForm");
-		$(".pagination li a").on("click", function() { // on() ÀÌº¥Æ® ÇÚµé·¯¸¦ µî·ÏÇÔ.
-			event.preventDefault(); // event ÀÚ¹Ù½ºÅ©¸³Æ® ³»Àå °´Ã¼ , ±âº»À¸·Î ¼³Á¤µÈ ÀÌº¥Æ® ½ÇÇàÀ» ¸·¾ÆÁØ´Ù.
-
-			var targetPage = $(this).attr("href") // ÇöÀç ÀÌº¥Æ®°¡ ¹ß»ıÇÑ a ÅÂ±×
-			pageForm.find("[name=page]").val(targetPage);
-
-			pageForm.attr("action", "listPage");
-			pageForm.attr("mehtod", "get");
-			pageForm.submit();
-
-		});
-
-		$(".title").on(
-				"click",
-				function() {
-					event.preventDefault();
-					var bno = $(this).attr("href");
-					pageForm.attr("action", "read");
-					pageForm.attr("mehtod", "get");
-					$("<input type='text' name='bno' value='"+bno+"'>")
-							.appendTo(pageForm);
-
-					pageForm.submit();
-
-				});
-
-		$("#searchBtn").on("click", function() {
-			pageForm.attr("action", "listPage");
-			pageForm.attr("method", "get");
-			pageForm.submit();
-		});
-
-		$("#newBtn").on("click", function() {
-			pageForm.attr("action", "create");
-			pageForm.attr("method", "get");
-			pageForm.submit();
-		});
-	</script>
+<script>
+	$(".pagination li a").on("click", function(event){
+		event.preventDefault();										// ì‹¤ì œ í™”ë©´ ì´ë™ì„ ë§‰ìŒ
+		
+		var pageForm = $("#pageForm");								// pageFormì˜ ì œì´ì¿¼ë¦¬ ê°ì²´ ì €ì¥
+		var targetPage = $(this).attr("href");						// ì´ë™í•  í˜ì´ì§€ë¥¼ ê°€ì ¸ì˜´ 
+		pageForm.find("[name='page']").val(targetPage);				// ì´ë™í•  í˜ì´ì§€ë¥¼ ì €ì¥
+		pageForm.attr("action", "listPage").attr("method", "get");	// getë°©ì‹ìœ¼ë¡œ listPageë¡œ	
+		pageForm.submit();											// ë³´ëƒ„
+	});
+	
+	$(".title").on("click", function(event){
+		event.preventDefault();
+		
+		var pageForm = $("#pageForm");
+		var bno = $(this).attr("href");
+		pageForm.attr("action", "read").attr("method", "get");
+		pageForm.append("<input type='hidden' name='bno' value='"+ bno +"'>");
+		pageForm.submit();
+	});
+	
+	$("#searchBtn").on("click", function(){
+		var pageForm = $("#pageForm");
+		pageForm.attr("action", "listPage");
+		pageForm.attr("method", "get");
+		pageForm.submit();
+	});
+	
+	$("#newBtn").on("click", function(){
+		var pageForm = $("#pageForm");
+		pageForm.attr("action", "create");
+		pageForm.attr("method", "get");
+		pageForm.submit();
+	});
+</script>
 </body>
 </html>

@@ -3,16 +3,6 @@ package yjc.wdb.bbs.bean;
 import java.sql.Date;
 
 public class BoardReply {
-/*
- * create table tbl_reply_1501280(
-rno int primary key auto_increment,
-bno int references tbl_board(bno),
-replyText varchar(1000) not null,
-replyer varchar(50) not null,
-regdate TIMESTAMP not null default now(),
-updateDate timestamp not null default now()
-);
- * */
 	private int rno;
 	private int bno;
 	private String replyText;
@@ -21,7 +11,7 @@ updateDate timestamp not null default now()
 	private Date updateDate;
 	
 	public String toString(){
-		return "(rno : "+rno+", bno : "+ bno + ", replyTest : "+ replyText +")";
+		return "rno:"+rno+", bno:"+bno+", replytext:"+replyText+", replyer:"+replyer+", regdate:"+regdate+", updatedate:"+updateDate;
 	}
 	public int getRno() {
 		return rno;
@@ -38,8 +28,8 @@ updateDate timestamp not null default now()
 	public String getReplyText() {
 		return replyText;
 	}
-	public void setReplyText(String replyText) {
-		this.replyText = replyText;
+	public void setReplyText(String replytext) {
+		this.replyText = replytext;
 	}
 	public String getReplyer() {
 		return replyer;

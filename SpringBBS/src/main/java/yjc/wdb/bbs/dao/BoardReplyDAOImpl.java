@@ -15,52 +15,43 @@ import yjc.wdb.bbs.bean.Criteria;
 @Repository
 public class BoardReplyDAOImpl implements BoardReplyDAO {
 
-	private static final String NAMESPACE ="yjc.wdb.BoardReplyMapper";
-
 	@Inject
 	private SqlSession sqlSession;
-
-
+	private static final String NAMESPACE = "yjc.wdb.ReplyMapper";
+	
 	@Override
 	public List<BoardReply> list(int bno) throws Exception {
-
-		return sqlSession.selectList(NAMESPACE+".list", bno);
+		return sqlSession.selectList(NAMESPACE + ".list", bno);
 	}
 
 	@Override
 	public void create(BoardReply reply) throws Exception {
-		sqlSession.selectList(NAMESPACE+".create", reply);
-
+		sqlSession.insert(NAMESPACE + ".create", reply);
 	}
 
 	@Override
 	public void update(BoardReply reply) throws Exception {
-		sqlSession.selectList(NAMESPACE+".update", reply);
-
+		sqlSession.update(NAMESPACE + ".update", reply); 
 	}
 
 	@Override
 	public void delete(int rno) throws Exception {
-		sqlSession.selectList(NAMESPACE+".delete", rno);
+		sqlSession.delete(NAMESPACE + ".delete", rno);
 	}
 
 	@Override
 	public List<BoardReply> listPage(int bno, Criteria criteria) throws Exception {
-		
-		// 넘겨줄 데이터가 두가지
-		// 한 객체로 넘겨줘야함.
-		
-		// map : key , value로 이루어진 데이터
-		Map<String, Object> paraMap = new HashMap<String, Object>();
-		paraMap.put("bno", bno);
-		paraMap.put("criteria", criteria);
-		
-		return sqlSession.selectList(NAMESPACE+".listPage", paraMap);
+		// 보낼 데이터가 두개 이상이면 한 객체로 묶어서 넘겨야한다.
+		// Map을 이용 (key,value)쌍으로 저장하는 객체
+		Map<String, Object> paramMap = new HashMap<>();
+		paramMap.put("bno", bno);
+		paramMap.put("criteria", criteria);
+		return sqlSession.selectList(NAMESPACE + ".listPage", paramMap);
 	}
 
 	@Override
 	public int replyCount(int bno) throws Exception {
-		return sqlSession.selectOne(NAMESPACE+".replyCount", bno);
+		return sqlSession.selectOne(NAMESPACE + ".replyCount", bno);
 	}
 
 }

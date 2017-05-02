@@ -6,7 +6,7 @@ import yjc.wdb.bbs.bean.Board;
 import yjc.wdb.bbs.bean.Criteria;
 
 public interface BoardDAO {
-	// CRUD : Create, Retrieve, Update, Delete
+	// CRUD : Create, Read, Update, Delete 
 	public void create(Board vo) throws Exception;
 	public Board read(int bno) throws Exception;
 	public void update(Board vo) throws Exception;
@@ -15,6 +15,5 @@ public interface BoardDAO {
 	public List<Board> listPage(Criteria criteria) throws Exception;
 	public int getTotalCount() throws Exception;
 	public List<Board> listSearch(Criteria criteria) throws Exception;
-	public int getSearchTotalcount(Criteria criteria) throws Exception;
-	
+	public int getSearchTotalCount(Criteria criteria) throws Exception; 
 }

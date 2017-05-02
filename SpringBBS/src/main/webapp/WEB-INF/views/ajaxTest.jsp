@@ -1,251 +1,200 @@
-<%@ page language="java" contentType="text/html; charset=EUC-KR"
-	pageEncoding="EUC-KR"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<!DOCTYPE html>
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=EUC-KR">
+<meta charset="UTF-8">
 <title>Insert title here</title>
-<script
-	src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-
-<style type="text/css">
-#modDiv {
-	width: 200px;
-	height: 100px;
-	background-color: lightgray;
-	position: absolute;
-	top: 50%;
-	left: 50%;
-	margin-top: -50px;
-	margin-left: -150px;
-	padding: 10px;
-	z-index: 100;
-	box-shadow: 2px 2px 3px black;
-	display: none;
-}
+<!-- <script src="./resources/jquery-3.1.1.min.js"></script> -->
+<script src="http://code.jquery.com/jquery-3.1.1.min.js"></script>
+<style>
+	#modDiv {
+		width : 300px;
+		height : 100px;
+		background-color : #83b14e;
+		position : absolute;
+		top : 50%;
+		left : 50%;
+		margin-top : -50px;
+		margin-left : -150px;
+		padding : 10px;
+		z-index : 1000;
+		box-shadow: 2px 2px 4px black;
+		display: none;
+	}
 </style>
 </head>
 <body>
 	<h2>Ajax Test Page</h2>
+	
 	<div>
 		<div>
-			<label>ÀÛ¼ºÀÚ : </label> <input type="text" name="replyer"
-				id="newReplyer" />
+			<label>ì‘ì„±ì : </label>
+			<input type="text" name="replyer" id="newReplier">
 		</div>
-
 		<div>
-			<label>´ñ±Û : </label> <input type="text" name="replyText"
-				id="newReplyText" />
+			<label>ëŒ“ê¸€ : </label>
+			<input type="text" name="replyText" id="newReplyText">
 		</div>
-
 		<div>
-			<button id="replyAddBtn">´ñ±Û µî·Ï</button>
+			<button id="replyAddBtn">ëŒ“ê¸€ ë“±ë¡</button>
 		</div>
 	</div>
-	<ul id="replies"></ul>
-
+	
+	<ul id="replies">
+	</ul>
+	
 	<div id="modDiv">
 		<div class="modal-title"></div>
 		<div>
-			<input type='text' id='replyText' />
+			<input type="text" id="replyText">
 		</div>
 		<div>
-			<button id="replyModBtn">¼öÁ¤</button>
-			<button id="replyDelBtn">»èÁ¦</button>
-			<button id="closeBtn">´İ±â</button>
+			<button id="replyModBtn">ìˆ˜ì •</button>
+			<button id="replyDelBtn">ì‚­ì œ</button>
+			<button id="closeBtn">ë‹«ê¸°</button>
 		</div>
 	</div>
-
+	
 	<ul class="pagination">
-
 	</ul>
-
+	
+	
 	<script>
-		var bno = 1;
-		// getAllReplies();
+		var bno = 2;
+		var currentPage = 1;
 		getPageReplyList(1);
 		
-		var currentPage = 1;
-		
-		$(".pagination").on("click", "li a", function(){
-			event.preventDefault();
-			
-			var replyPage = $(this).attr("href");
-			getPageReplyList(replyPage);
-		});
-		
-		function getPageReplyList(page){
-			
-			currentPage = page;
-			
-			$.getJSON("replies/"+bno+"/"+page, function(data){
-				
+		function getAllReplies(){
+			$.getJSON("replies/all/" + bno, function(data){
+				console.log(data);
 				var str = "";
-                console.log(data.length);
-
-                $(data.list)
-                        .each(
-                                function() {
-                                    str += "<li data-rno='"+this.rno+"' class='replyLi'>"
-                                            + this.rno
-                                            + "¹ø ´ñ±Û : "
-                                            + this.replyText
-                                            + '<button>º¯°æ</button>'
-                                            + "</li>";
-                                }); // ¹è¿­ º¸³»Áú ¶§ each¹® »ç¿ë
-
-                $("#replies").html(str);
-                printPaging(data.criteria);
-				
-				
+				$(data).each(function(){
+					str += "<li data-rno = '"+this.rno+"' class='replyLi'>" + this.rno + " : " + this.replyText + "<button>ìˆ˜ì •</button></li>";
+				});
+				$("#replies").html(str);
 			});
-			
 		}
 		
-		
-		function printPaging(criteria){
-			
-			var str ="";
-			
-			if(criteria.prev){
-				str += "<li><a href='"+(criteria.startPage-1)+"'>"+
-			              "<<"+"</a></li>";
-			}
-			
-			for(var i = criteria.startPage; i <= criteria.endPage; i++){
-				
-				var strClass = criteria.page == i ? "class='active'" : "";
-				str += "<li"+ strClass +"><a href='"+i+"'>" + i + "</a></li>";
-				
-			}
-			
-			if(criteria.next){
-				str += "<li><a href='"+(criteria.endPage+1)+"'>"+
-                          ">>"+"</a></li>";
-			}
-			
-			$(".pagination").html(str);
-			
-		}
-		
-		
-		$("#replyModBtn").on("click", function(){
-			var rno = $(".modal-title").html();
-			var replyText = $("#replyText").val();
-			
-			$.ajax({
-				type : "PUT",
-				url : "replies/"+rno,
-				headers : {
-					"Content-Type" : "application/json",
-					"X-HTTP-Method-Override" : "PUT"
-				},
-				dataType : "text",
-				data : JSON.stringify({
-					"replyText" : replyText
-				}),
-				success : function(result){
-					if(result == "SUCCESS"){
-						alert("¼öÁ¤µÇ¾ú½À´Ï´Ù.");
-						$("#modDiv").hide("slow");
-						getPageReplyList(currentPage);
-					}
-				}
-				
-			});
-		});
-		
-		$("#replyDelBtn").on("click", function(){
-			var ans = confirm("Are you sure to delete?");
-			
-			if(ans == false) return;
-			
-			var rno = $(".modal-title").html();
-			
-			$.ajax({
-				type: "delete",
-				url:"replies/"+rno,
-				success: function(result){
-					if(result == "SUCCESS" )
-						alert("»èÁ¦µÇ¾ú½À´Ï´Ù.");
-					$("#modDiv").hide("slow");
-					getPageReplyList(currentPage);
-			
-				}
-			});
-		});
-		
-		$("#closeBtn").on("click", function(){
-			$("#modDiv").hide("slow");
-		});
-
+		// ëŒ“ê¸€ ìˆ˜ì •ì°½ ë²„íŠ¼
 		$("#replies").on("click", ".replyLi button", function(){
+			var reply = $(this).parent();
+			var rno = reply.attr("data-rno");
+			var replyText = reply.text();
 			
-			  var li = $(this).parent();
-			  var rno = li.attr("data-rno");
-			  var replyText = li.text();
-			  
-			  alert(rno+" : "+ replyText);
-			  
-			  $(".modal-title").html(rno);
-			  $("#replyText").val(replyText);
-			  $("#modDiv").show("slow");
-			  
-	
-			
-		}); // ¹öÆ°ÀÌ Á¸ÀçÇÏÁö ¾Ê±â ¶§¹®¿¡ µÚ¿¡ Àû¾îÁÜ. (¹öÆ° µ¿ÀûÀÓ) 
+			$(".modal-title").html(rno);
+			$("#replyText").val(replyText);
+			$("#modDiv").show("slow");
+		});
 		
-		
-
-		
-		function getAllReplies() {
-			$
-					.getJSON(
-							"replies/all/" + bno,
-							function(data) {
-
-								var str = "";
-								console.log(data.length);
-
-								$(data)
-										.each(
-												function() {
-													str += "<li data-rno='"+this.rno+"' class='replyLi'>"
-															+ this.rno
-															+ "¹ø ´ñ±Û : "
-															+ this.replyText
-															+ '<button>º¯°æ</button>'
-															+ "</li>";
-												}); // ¹è¿­ º¸³»Áú ¶§ each¹® »ç¿ë
-
-								$("#replies").html(str);
-
-							}); // Äİ¹éÇÔ¼ö µî·Ï
-		}
-
-		$("#replyAddBtn").on("click", function() {
-			var replyer = $("#newReplyer").val();
+		// ëŒ“ê¸€ ì¶”ê°€ ë²„íŠ¼
+		$("#replyAddBtn").on("click", function(){
+			var replyer = $("#newReplier").val();
 			var replyText = $("#newReplyText").val();
-
+			
 			$.ajax({
-				type : "POST",
+				type : "post",
 				url : "replies",
 				headers : {
 					"Content-Type" : "application/json",
 					"X-HTTP-Method-Override" : "POST"
 				},
-				dataType : 'text',
+				dataType : "text",
 				data : JSON.stringify({
 					bno : bno,
 					replyer : replyer,
 					replyText : replyText
 				}),
-				success : function(result, status) {
-					if (result == 'SUCCESS') {
-						getPageReplyList(1);
+				success : function(result){
+					if(result == 'SUCCESS'){
+						alert("ë“±ë¡ë˜ì—ˆìŠµë‹ˆë‹¤.");
+						getPageReplyList(1);	// ìƒˆë¡œìš´ ê¸€ ë“±ë¡ í›„ 1í˜ì´ì§€ë¡œ 
 					}
 				}
 			});
+		});
+		
+		// ì‚­ì œë²„íŠ¼
+		$("#replyDelBtn").on("click", function(){
+			var ans = confirm("Are you sure to delete?");
+			if(ans == false) return;
+			var rno = $(".modal-title").html();
+			
+			$.ajax({
+				type : "delete",
+				url : "replies/"+rno,
+				success : function(result){
+					if(result == "SUCCESS")
+						alert("ì‚­ì œë˜ì—ˆìŠµë‹ˆë‹¤.");
+					$("#modDiv").hide("slow");
+					getPageReplyList(currentPage);		// ì‚­ì œ í›„ í˜„ì¬í˜ì´ì§€
+				}
+			});
+		});
+		
+		// ë‹«ê¸°ë²„íŠ¼
+		$("#closeBtn").on("click", function(){
+			$("#modDiv").hide("slow");
+		});
+		
+		// ëŒ“ê¸€ ìˆ˜ì • ì²˜ë¦¬
+		$("#replyModBtn").on("click", function(){
+			var rno = $(".modal-title").html();
+			var replyText = $("#replyText").val();
+			
+			$.ajax({
+				type : "put",
+				url : "replies/" + rno,	// ê²½ë¡œ ì•ì— / ìˆìœ¼ë©´ ì•ˆë¨
+				headers : {
+					"Content-Type" : "application/json",
+					"X-HTTP-Method-Override" : "PUT"
+				},
+				data : JSON.stringify({replyText : replyText}),
+				dataType : "text",
+				success : function(result){
+					console.log("result : " + result);
+					if(result == "SUCCESS"){
+						alert("ìˆ˜ì •ë˜ì—ˆìŠµë‹ˆë‹¤.");
+						$("#modDiv").hide("slow");
+						// getAllReplies();
+						getPageReplyList(currentPage);		// ìˆ˜ì • í›„ í˜„ì¬ í˜ì´ì§€
+					}
+				}
+			});
+		});
+		
+		// ëŒ“ê¸€ í˜ì´ì§€ë¥¼ ìœ„í•œ ul ì²˜ë¦¬
+		function getPageReplyList(page) {
+			currentPage = page;
+			$.getJSON("replies/" + bno + "/" + page, function(data){
+				var str = "";
+				$(data.list).each(function(){
+					str += "<li data-rno = '"+this.rno+"' class='replyLi'>" + this.rno + " : " + this.replyText + "<button>ìˆ˜ì •</button></li>";
+				});
+				$("#replies").html(str);
+				printPaging(data.criteria);
+			});
+		}
+		
+		function printPaging(criteria){
+			var str = "";
+			if(criteria.prev){
+				str += "<li><a href='" + (criteria.startPage - 1) + "'>&laquo;</a></li>";
+			}
+			for(var i = criteria.startPage; i <= criteria.endPage; i++) {
+				var strClass = criteria.page == i ? 'class=active' : '';
+				str += "<li><a href='" + i + "'>" + i + "</a></li>";
+			}
+			if(criteria.next){
+				str += "<li><a href='" + (criteria.endPage + 1) + "'>&raquo;</a></li>";
+			}
+			$(".pagination").html(str);
+		}
+		
+		//
+		$(".pagination").on("click", "li a", function(){
+			event.preventDefault();		// ì´ë²¤íŠ¸ ë§‰ê¸°
+			var replyPage = $(this).attr("href");
+			getPageReplyList(replyPage);
 		});
 	</script>
 </body>

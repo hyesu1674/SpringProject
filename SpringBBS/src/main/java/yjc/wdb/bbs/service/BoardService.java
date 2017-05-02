@@ -6,13 +6,12 @@ import yjc.wdb.bbs.bean.Board;
 import yjc.wdb.bbs.bean.Criteria;
 
 public interface BoardService {
-	//DAO가 해주는 일을 한번 더 받음
 	public void regist(Board b) throws Exception;
 	public Board read(int bno) throws Exception;
 	public void modify(Board b) throws Exception;
 	public void remove(int bno) throws Exception;
 	public List<Board> listAll() throws Exception;
-	public List<Board> listPage(Criteria criteria) throws Exception;
+	public List<Board> listPage(Criteria criteria) throws Exception;	
 	public int getTotalCount() throws Exception;
 	public List<Board> listSearch(Criteria criteria) throws Exception;
 	public int getSearchTotalCount(Criteria criteria) throws Exception;

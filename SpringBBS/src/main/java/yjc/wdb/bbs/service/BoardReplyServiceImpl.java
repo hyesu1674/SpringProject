@@ -23,7 +23,6 @@ public class BoardReplyServiceImpl implements BoardReplyService {
 
 	@Override
 	public void create(BoardReply reply) throws Exception {
-		
 		dao.create(reply);
 	}
 
@@ -39,13 +38,11 @@ public class BoardReplyServiceImpl implements BoardReplyService {
 
 	@Override
 	public List<BoardReply> listPage(int bno, Criteria criteria) throws Exception {
-		// TODO Auto-generated method stub
 		return dao.listPage(bno, criteria);
 	}
 
 	@Override
 	public int replyCount(int bno) throws Exception {
-		// TODO Auto-generated method stub
 		return dao.replyCount(bno);
 	}
 

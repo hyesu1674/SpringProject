@@ -10,46 +10,40 @@ import yjc.wdb.bbs.bean.Board;
 import yjc.wdb.bbs.bean.Criteria;
 import yjc.wdb.bbs.dao.BoardDAO;
 
-@Service // 비지니스 로직
+@Service // 비지니스 로직을 처리하는 스프링 빈으로 등록
 public class BoardServiceImpl implements BoardService {
-	
+
+	// 모든 메소드에서 접근할 DAO 객체
 	@Inject
 	private BoardDAO dao;
-
+	
 	@Override
 	public void regist(Board b) throws Exception {
 		dao.create(b);
-		
 	}
 
 	@Override
 	public Board read(int bno) throws Exception {
-		
 		return dao.read(bno);
 	}
 
 	@Override
 	public void modify(Board b) throws Exception {
-		
 		dao.update(b);
-		
 	}
 
 	@Override
 	public void remove(int bno) throws Exception {
-		
 		dao.delete(bno);
 	}
 
 	@Override
 	public List<Board> listAll() throws Exception {
-		
 		return dao.listAll();
 	}
 
 	@Override
 	public List<Board> listPage(Criteria criteria) throws Exception {
-		
 		return dao.listPage(criteria);
 	}
 
@@ -65,8 +59,7 @@ public class BoardServiceImpl implements BoardService {
 
 	@Override
 	public int getSearchTotalCount(Criteria criteria) throws Exception {
-		return dao.getSearchTotalcount(criteria);
+		return dao.getSearchTotalCount(criteria);
 	}
-	
 
 }
